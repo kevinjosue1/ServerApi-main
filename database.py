@@ -1,9 +1,9 @@
-import pandas as pd
+import pandas as pd 
 from sentence_transformers import SentenceTransformer, util
 import chromadb 
 from chromadb.utils import embedding_functions
 
-def cargar_datos(csv):
+def cargar_datos(csv): 
     df = pd.read_csv(csv)
     model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
     embeddings = model.encode(df['details'],batch_size=64,show_progress_bar=True)
@@ -11,7 +11,7 @@ def cargar_datos(csv):
     df['ids'] = df.index
     df['ids'] = df['ids'].astype('str')
     chroma_client = chromadb.Client()
-    client_persistent = chromadb.PersistentClient("D:\loopPY\db")
+    client_persistent = chromadb.PersistentClient("./database.py")
     db = client_persistent.create_collection(name = "impovadb")
     db.add(
         ids = df["ids"].tolist(),
@@ -23,7 +23,7 @@ def get_data_chroma(query):
     
     try :
         
-        client_persistent = chromadb.PersistentClient('D:\loopPY\db') 
+        client_persistent = chromadb.PersistentClient('./database.py') 
         db = client_persistent.get_collection(name='impovadb')
 
         results = db.query(
@@ -34,8 +34,9 @@ def get_data_chroma(query):
         return(str(results['metadatas'][0][0]['details'])) 
     except Exception:  
         print('error ' + str(Exception))
-    
-#print(get_data_chroma("cuanto cuesta la core I5"))
+
+print(pd. __version__)
+
+#print(get_data_chroma("cuanto cuestan las computadoras "))
 #cargar_datos("D:\loopPY\csv\database.csv")
 
-#database
